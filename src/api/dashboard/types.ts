@@ -4,3 +4,5 @@ export interface ShiCiData {
   content?: string;
   origin?: string;
 }
+
+export interface WeatherData {}

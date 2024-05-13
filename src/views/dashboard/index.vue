@@ -16,6 +16,40 @@
 
         <el-col :span="6" :xs="24">
           <div class="flex h-full items-center justify-around">
+            <div>
+              {{ weather.city.Province }} -
+              {{ weather.city.City || weather.city.Province }}
+            </div>
+            <div>
+              {{ weather.condition.day_weather }} -
+              {{ weather.city.night_weather }}
+            </div>
+            <div>
+              {{ weather.condition.day_weather_short }} -
+              {{ weather.city.night_weather_short }}
+            </div>
+            <div>
+              {{ weather.condition.day_wind_direction }} -
+              {{ weather.city.day_wind_power }}
+            </div>
+            <div>
+              {{ weather.condition.night_wind_direction }} -
+              {{ weather.city.night_wind_power }}
+            </div>
+            <div>
+              {{ weather.condition.min_degree }} - {{ weather.city.max_degree }}
+            </div>
+            <div>{{ weather.condition.aqi.aqi }}</div>
+            <div>{{ weather.condition.aqi.aqi_level }}</div>
+            <div>{{ weather.condition.aqi.aqi_name }}</div>
+            <div>{{ weather.condition.aqi.co }}</div>
+            <div>{{ weather.condition.aqi.no2 }}</div>
+            <div>{{ weather.condition.aqi.o3 }}</div>
+            <div>{{ weather.condition.aqi.pm10 }}</div>
+            <div>{{ weather.condition.aqi["pm2.5"] }}</div>
+            <div>{{ weather.condition.aqi.so2 }}</div>
+            <div>{{ weather.condition.aqi.update_time }}</div>
+
             <el-statistic
               v-for="item in statisticData"
               :key="item.key"
@@ -95,7 +129,7 @@
 </template>
 
 <script setup lang="ts">
-import { ShiCiData } from "@/api/dashboard/types";
+import { ShiCiData, WeatherData } from "@/api/dashboard/types";
 
 defineOptions({
   name: "Dashboard",
@@ -104,17 +138,22 @@ defineOptions({
 
 import { useUserStore } from "@/store/modules/user";
 import { useTransition, TransitionPresets } from "@vueuse/core";
-import { getShiCi } from "@/api/dashboard";
+import { getShiCi, GetWeather } from "@/api/dashboard";
 
 onMounted(() => {
   handleQuery();
 });
 
 const shici = ref("");
+const weather = ref("");
 function handleQuery() {
   getShiCi().then((data: ShiCiData | any) => {
     console.log("getShiCi", data);
     shici.value = `${data.content} -- ${data.author}`;
+  });
+  GetWeather().then((data) => {
+    console.log("GetWeather", data);
+    weather.value = data.result;
   });
 }
 
@@ -171,29 +210,6 @@ const orderCountOutput = useTransition(orderCount, {
   transition: TransitionPresets.easeOutExpo,
 });
 orderCount.value = 2000;
-
-// 右上角数量
-const statisticData = ref([
-  {
-    value: 99,
-    iconClass: "message",
-    title: "消息",
-    key: "message",
-  },
-  {
-    value: 50,
-    iconClass: "todolist",
-    title: "待办",
-    suffix: "/100",
-    key: "upcoming",
-  },
-  {
-    value: 10,
-    iconClass: "project",
-    title: "项目",
-    key: "project",
-  },
-]);
 
 interface CardProp {
   title: string;
