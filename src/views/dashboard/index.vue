@@ -145,7 +145,7 @@ onMounted(() => {
 });
 
 const shici = ref("");
-const weather = ref("");
+const weather = ref({ city: {}, condition: { day: {}, aqi: {} } });
 function handleQuery() {
   getShiCi().then((data: ShiCiData | any) => {
     console.log("getShiCi", data);

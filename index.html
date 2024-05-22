@@ -34,32 +34,71 @@
       height: 100%;
     }
 
+    /* loading.css */
     .loader {
-      position: relative;
-      width: 40px;
-      aspect-ratio: 0.577;
-      overflow: hidden;
-      clip-path: polygon(0 0, 100% 100%, 0 100%, 100% 0);
-      animation: l19 2s infinite linear;
+      position: absolute;
+      inset: 0;
+      width: 50px;
+      height: 50px;
+      margin: auto;
     }
 
     .loader::before {
       position: absolute;
-      inset: -150%;
+      top: 59px;
+      left: 0;
+      width: 50px;
+      height: 5px;
       content: "";
-      background: repeating-conic-gradient(
-        from 30deg,
-        #ffabab 0 60deg,
-        #abe4ff 0 120deg,
-        #ff7373 0 180deg
-      );
-      animation: inherit;
-      animation-direction: reverse;
+      background: #00000080;
+      border-radius: 50%;
+      opacity: 0.7;
+      animation: shadow 0.5s linear infinite;
     }
 
-    @keyframes l19 {
+    .loader::after {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 50px;
+      height: 50px;
+      content: "";
+      background: #e04960;
+      border-radius: 3px;
+      animation: animate 0.5s linear infinite;
+    }
+
+    @keyframes animate {
+      17% {
+        border-bottom-right-radius: 3px;
+      }
+
+      25% {
+        transform: translateY(9px) rotate(22.5deg);
+      }
+
+      50% {
+        border-bottom-right-radius: 40px;
+        transform: translateY(18px) scale(1, 0.9) rotate(45deg);
+      }
+
+      75% {
+        transform: translateY(9px) rotate(67.5deg);
+      }
+
       100% {
-        transform: rotate(360deg);
+        transform: translateY(0) rotate(90deg);
+      }
+    }
+
+    @keyframes shadow {
+      0%,
+      100% {
+        transform: scale(1, 1);
+      }
+
+      50% {
+        transform: scale(1.2, 1);
       }
     }
   </style>
