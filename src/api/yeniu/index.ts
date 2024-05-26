@@ -1,12 +1,14 @@
 import request from "@/utils/request-custom";
 import { AxiosPromise } from "axios";
 
+const baseUrl = "https://qingjing-01.oss-cn-beijing.aliyuncs.com";
+
 /**
  * 获取精选打卡
  */
 export function getSpecialList(id: string): AxiosPromise<any> {
   return request({
-    url: `/data/${id}.json`,
+    url: `${baseUrl}/data/${id}.json`,
     method: "get",
   });
 }
@@ -16,7 +18,7 @@ export function getSpecialList(id: string): AxiosPromise<any> {
  */
 export function getExhibitionList(): AxiosPromise<any> {
   return request({
-    url: `/response.json`,
+    url: `${baseUrl}/response.json`,
     method: "get",
   });
 }
@@ -26,7 +28,7 @@ export function getExhibitionList(): AxiosPromise<any> {
  */
 export function getCommentList(): AxiosPromise<any> {
   return request({
-    url: `/comment_list/2023-12-31.json`,
+    url: `${baseUrl}/comment_list/2023-12-31.json`,
     method: "get",
   });
 }

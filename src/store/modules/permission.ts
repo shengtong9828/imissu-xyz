@@ -6,6 +6,8 @@ import { listRoutes } from "@/api/menu";
 const modules = import.meta.glob("../../views/**/**.vue");
 const Layout = () => import("@/layout/index.vue");
 
+const hasToken = localStorage.getItem("accessToken");
+
 /**
  * Use meta.role to determine if the current user has permission
  *
@@ -74,7 +76,26 @@ export const usePermissionStore = defineStore("permission", () => {
 
   // actions
   function setRoutes(newRoutes: RouteRecordRaw[]) {
-    routes.value = constantRoutes.concat(newRoutes);
+    if (hasToken) {
+      routes.value = constantRoutes.concat(newRoutes);
+    } else {
+      const finallyRoutes = constantRoutes.filter(
+        (ele) => ele.path !== "/login"
+      );
+      // finallyRoutes.push({
+      //   path: "/",
+      //   component: () => import("@/layout/index.vue"),
+      //   children: [
+      //     {
+      //       path: "login",
+      //       name: "login",
+      //       component: () => import("@/views/login/index.vue"),
+      //       meta: { title: "登陆", icon: "close_right" },
+      //     },
+      //   ],
+      // });
+      routes.value = finallyRoutes.concat(newRoutes);
+    }
   }
   /**
    * 生成动态路由

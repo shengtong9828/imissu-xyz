@@ -11,10 +11,6 @@ const service = axios.create({
 // 请求拦截器
 service.interceptors.request.use(
   (config: InternalAxiosRequestConfig) => {
-    const accessToken = localStorage.getItem("accessToken");
-    if (accessToken) {
-      config.headers.Authorization = accessToken;
-    }
     return config;
   },
   (error: any) => {
@@ -25,13 +21,12 @@ service.interceptors.request.use(
 // 响应拦截器
 service.interceptors.response.use(
   (response: AxiosResponse) => {
-    if (response.config.url === "https://v1.jinrishici.com/all.json") {
+    const { code, msg, status } = response.data;
+    if (status === 0) {
       return response.data;
     }
-
-    const { code, msg, status } = response.data;
-    if (code === "00000" || status === 0) {
-      return response.data;
+    if (response.status === 200) {
+      return response;
     }
     // 响应数据为二进制流处理(Excel导出)
     if (response.data instanceof ArrayBuffer) {

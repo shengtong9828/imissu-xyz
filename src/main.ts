@@ -3,7 +3,7 @@ import App from "./App.vue";
 import router from "@/router";
 import { setupStore } from "@/store";
 import { setupDirective } from "@/directive";
-import { setupElIcons, setupPermission } from "@/plugins";
+import { setupElIcons, setupPermission, setupCommonMethods } from "@/plugins";
 
 // 本地SVG图标
 import "virtual:svg-icons-register";
@@ -21,6 +21,8 @@ setupDirective(app);
 setupStore(app);
 // 全局注册Element-plus图标
 setupElIcons(app);
+// 全局注册 公共方法
+setupCommonMethods();
 // 注册动态路由
 setupPermission();
 app.use(router).mount("#app");
