@@ -15,7 +15,7 @@
     </template>
 
     <!-- 用户头像 -->
-    <el-dropdown class="setting-item" trigger="click">
+    <!-- <el-dropdown class="setting-item" trigger="click">
       <div class="flex-center h100% p10px">
         <img :src="avatar" class="rounded-full mr-10px w24px w24px" />
         <span>{{ userStore.user.username }}</span>
@@ -36,7 +36,7 @@
           </el-dropdown-item>
         </el-dropdown-menu>
       </template>
-    </el-dropdown>
+    </el-dropdown> -->
 
     <!-- 设置 -->
     <template v-if="defaultSettings.showSettings">

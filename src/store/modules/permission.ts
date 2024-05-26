@@ -82,19 +82,18 @@ export const usePermissionStore = defineStore("permission", () => {
       const finallyRoutes = constantRoutes.filter(
         (ele) => ele.path !== "/login"
       );
-      finallyRoutes.push({
-        path: "/",
-        component: () => import("@/layout/index.vue"),
-        children: [
-          {
-            path: "login",
-            name: "login",
-            component: () => import("@/views/login/index.vue"),
-            meta: { title: "登陆", icon: "homepage" },
-          },
-        ],
-      });
-      console.log("finallyRoutes", finallyRoutes);
+      // finallyRoutes.push({
+      //   path: "/",
+      //   component: () => import("@/layout/index.vue"),
+      //   children: [
+      //     {
+      //       path: "login",
+      //       name: "login",
+      //       component: () => import("@/views/login/index.vue"),
+      //       meta: { title: "登陆", icon: "close_right" },
+      //     },
+      //   ],
+      // });
       routes.value = finallyRoutes.concat(newRoutes);
     }
   }

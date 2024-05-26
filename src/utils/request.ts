@@ -25,10 +25,6 @@ service.interceptors.request.use(
 // 响应拦截器
 service.interceptors.response.use(
   (response: AxiosResponse) => {
-    if (response.config.url === "https://v1.jinrishici.com/all.json") {
-      return response.data;
-    }
-
     const { code, msg, status } = response.data;
     if (code === "00000" || status === 0) {
       return response.data;
