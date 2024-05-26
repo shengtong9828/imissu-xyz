@@ -14,30 +14,6 @@
       </el-tooltip>
     </template>
 
-    <!-- 用户头像 -->
-    <el-dropdown class="setting-item" trigger="click">
-      <div class="flex-center h100% p10px">
-        <img :src="avatar" class="rounded-full mr-10px w24px w24px" />
-        <span>{{ userStore.user.username }}</span>
-      </div>
-      <template #dropdown>
-        <el-dropdown-menu>
-          <a
-            target="_blank"
-            href="https://gitee.com/youlaiorg/vue3-element-admin"
-          >
-            <el-dropdown-item>项目地址</el-dropdown-item>
-          </a>
-          <a target="_blank" href="https://juejin.cn/post/7228990409909108793">
-            <el-dropdown-item>项目文档</el-dropdown-item>
-          </a>
-          <el-dropdown-item divided @click="logout">
-            注销登出
-          </el-dropdown-item>
-        </el-dropdown-menu>
-      </template>
-    </el-dropdown>
-
     <!-- 设置 -->
     <template v-if="defaultSettings.showSettings">
       <div class="setting-item" @click="settingStore.settingsVisible = true">
@@ -47,12 +23,7 @@
   </div>
 </template>
 <script setup lang="ts">
-import {
-  useAppStore,
-  useTagsViewStore,
-  useUserStore,
-  useSettingsStore,
-} from "@/store";
+import { useAppStore, useTagsViewStore, useSettingsStore } from "@/store";
 import defaultSettings from "@/settings";
 import { DeviceEnum } from "@/enums/DeviceEnum";
 
@@ -62,7 +33,6 @@ const avatar = ref(
 
 const appStore = useAppStore();
 const tagsViewStore = useTagsViewStore();
-const userStore = useUserStore();
 const settingStore = useSettingsStore();
 
 const route = useRoute();
@@ -71,27 +41,6 @@ const router = useRouter();
 const isMobile = computed(() => appStore.device === DeviceEnum.MOBILE);
 
 const { isFullscreen, toggle } = useFullscreen();
-
-/**
- * 注销
- */
-function logout() {
-  ElMessageBox.confirm("确定注销并退出系统吗？", "提示", {
-    confirmButtonText: "确定",
-    cancelButtonText: "取消",
-    type: "warning",
-    lockScroll: false,
-  }).then(() => {
-    userStore
-      .logout()
-      .then(() => {
-        tagsViewStore.delAllViews();
-      })
-      .then(() => {
-        router.push(`/login?redirect=${route.fullPath}`);
-      });
-  });
-}
 </script>
 <style lang="scss" scoped>
 .setting-item {

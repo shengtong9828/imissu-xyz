@@ -1,7 +1,6 @@
 import { RouteRecordRaw } from "vue-router";
 import { constantRoutes } from "@/router";
 import { store } from "@/store";
-import { listRoutes } from "@/api/menu";
 
 const modules = import.meta.glob("../../views/**/**.vue");
 const Layout = () => import("@/layout/index.vue");
@@ -77,27 +76,6 @@ export const usePermissionStore = defineStore("permission", () => {
     routes.value = constantRoutes.concat(newRoutes);
   }
   /**
-   * 生成动态路由
-   *
-   * @param roles 用户角色集合
-   * @returns
-   */
-  function generateRoutes(roles: string[]) {
-    return new Promise<RouteRecordRaw[]>((resolve, reject) => {
-      // 接口获取所有路由
-      listRoutes()
-        .then(({ data: asyncRoutes }) => {
-          // 根据角色获取有访问权限的路由
-          const accessedRoutes = filterAsyncRoutes(asyncRoutes, roles);
-          setRoutes(accessedRoutes);
-          resolve(accessedRoutes);
-        })
-        .catch((error) => {
-          reject(error);
-        });
-    });
-  }
-  /**
    * 初始化路由
    *
    * @returns
@@ -126,7 +104,6 @@ export const usePermissionStore = defineStore("permission", () => {
   return {
     routes,
     setRoutes,
-    generateRoutes,
     initialRoutes,
     mixLeftMenus,
     setMixLeftMenus,
