@@ -13,6 +13,6 @@
   @apply flex-x-between;
 
   height: $navbar-height;
-  background: var(--el-bg-color);
+  background: var(--menu-background); //var(--el-bg-color);
 }
 </style>
