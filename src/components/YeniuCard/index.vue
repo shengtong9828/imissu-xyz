@@ -140,6 +140,11 @@ function handlePreview(idx: number) {
 
       ::v-deep(.van-grid-item__content) {
         padding: 0;
+        .el-image,
+        .van-image {
+          width: 100%;
+          height: 100%;
+        }
       }
     }
 
