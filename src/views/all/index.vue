@@ -1,25 +1,5 @@
 <template>
   <div class="app-container">
-    <div class="search-container">
-      <el-form ref="queryFormRef" :model="queryParams" :inline="true">
-        <el-form-item prop="keywords" label="关键字">
-          <el-input
-            v-model="queryParams.keywords"
-            placeholder="角色名称"
-            clearable
-            @keyup.enter="handleQuery"
-          />
-        </el-form-item>
-
-        <el-form-item>
-          <el-button type="primary" @click="handleQuery"
-            ><i-ep-search />搜索</el-button
-          >
-          <el-button @click="resetQuery"><i-ep-refresh />重置</el-button>
-        </el-form-item>
-      </el-form>
-    </div>
-
     <YeniuCard
       v-for="item in roleList"
       :key="item.contentId"
@@ -43,8 +23,8 @@
 </template>
 
 <script setup lang="ts">
-import { RolePageVO, RoleQuery } from "@/api/role/types";
 import { getCommentList } from "@/api/yeniu";
+import { useRoute } from "vue-router";
 
 defineOptions({
   name: "All",
@@ -56,33 +36,19 @@ const queryFormRef = ref(ElForm);
 const loading = ref(false);
 const total = ref(0);
 
-const queryParams = reactive<RoleQuery>({
+const queryParams = reactive({
   pageNum: 1,
   pageSize: 10,
 });
 
-const roleList = ref<RolePageVO[]>();
-const totalList = ref<RolePageVO[]>();
-
-function imgRplPre(src: string) {
-  return true
-    ? `${
-        src.includes("https://cc.hjfile.cn/cc/img")
-          ? `${src.replace("https://cc.hjfile.cn/cc/img", "https://qingjing-01.oss-cn-beijing.aliyuncs.com/img_ys").substring(0, src.replace("https://cc.hjfile.cn/cc/img", "https://qingjing-01.oss-cn-beijing.aliyuncs.com/img_ys").lastIndexOf("."))}.jpg`
-          : src
-              .replace("https://i2n.hjfile.cn", "")
-              .replace(
-                "https://thirdwx.qlogo.cn/mmopen/vi_32/POgEwh4mIHO4nibH0KlMECNjjGxQUq24ZEaGT4poC6icRiccVGKSyXwibcPq4BWmiaIGuG1icwxaQX6grC9VemZoJ8rg/132",
-                "/u/132.jpg"
-              )
-      }`
-    : src;
-}
+const roleList = ref([]);
+const totalList = ref([]);
+const $route = useRoute();
 
 /** 查询 */
 function handleQuery() {
   loading.value = true;
-  getCommentList()
+  getCommentList($route.query.id?.toString() || "2023-12-31")
     .then(({ data }) => {
       console.log("getCommentList", data);
       data.items.forEach((i: any) => {

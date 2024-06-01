@@ -36,9 +36,9 @@ export function getStudyList(): AxiosPromise<any> {
 /**
  * 获取精选打卡
  */
-export function getCommentList(): AxiosPromise<any> {
+export function getCommentList(id: string): AxiosPromise<any> {
   return request({
-    url: `${baseUrl}/comment_list/2023-12-31.json`,
+    url: `${baseUrl}/comment_list/${id}.json`,
     method: "get",
   });
 }

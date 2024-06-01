@@ -72,6 +72,7 @@ export const constantRoutes: RouteRecordRaw[] = [
         component: () => import("@/views/Q&A/index.vue"),
         name: "Q&A", // 用于 keep-alive, 必须与SFC自动推导或者显示声明的组件name一致
         meta: {
+          hidden: true,
           title: "学习答疑",
           icon: "language",
           affix: false,

@@ -1,27 +1,7 @@
 <template>
   <div class="app-container">
-    <div class="search-container">
-      <el-form ref="queryFormRef" :model="queryParams" :inline="true">
-        <el-form-item prop="keywords" label="关键字">
-          <el-input
-            v-model="queryParams.keywords"
-            placeholder="角色名称"
-            clearable
-            @keyup.enter="handleQuery"
-          />
-        </el-form-item>
-
-        <el-form-item>
-          <el-button type="primary" @click="handleQuery"
-            ><i-ep-search />搜索</el-button
-          >
-          <el-button @click="resetQuery"><i-ep-refresh />重置</el-button>
-        </el-form-item>
-      </el-form>
-    </div>
-
     <YeniuCard
-      v-for="item in roleList"
+      v-for="item in tableData"
       :key="item.contentId"
       :user-info="userInfo"
       :card-info="item.cardInfo"
@@ -43,8 +23,8 @@
 </template>
 
 <script setup lang="ts">
-import { RolePageVO, RoleQuery } from "@/api/role/types";
 import { getSpecialList } from "@/api/yeniu";
+import { useRoute } from "vue-router";
 
 defineOptions({
   name: "Role",
@@ -56,14 +36,17 @@ const queryFormRef = ref(ElForm);
 const loading = ref(false);
 const total = ref(0);
 
-const queryParams = reactive<RoleQuery>({
+const queryParams = reactive({
   pageNum: 1,
   pageSize: 10,
 });
 
-const roleList = ref<RolePageVO[]>();
-const totalList = ref<RolePageVO[]>();
-const userInfo = ref<{}>();
+const tableData = ref([]);
+const totalList = ref([]);
+const userInfo = ref({});
+const $route = useRoute();
+
+console.log();
 
 function imgRplPre(src: string) {
   return true
@@ -83,38 +66,23 @@ function imgRplPre(src: string) {
 /** 查询 */
 function handleQuery() {
   loading.value = true;
-  getSpecialList("0069")
+  getSpecialList($route.query.id?.toString() || "0069")
     .then(({ data }) => {
-      console.log("getSpecialList", data);
-      // this.allData = res.data.data
-      //   this.headInfo = this.allData.dakaUserInfo
-      //   this.allTableData = this.allData.items
-      //   this.headInfo.avatar = imgRpl(this.headInfo.avatar)
-      //   this.allTableData.forEach(i => {
-      //     i.simpleContent = JSON.parse(i.simpleContent)
-      //     i.simpleContent.images.forEach(j => {
-      //       j.src = imgRplPre(j.src)
-      //     })
-      //     i.taskList = []
-      //     i.evaluateStatus = 0
-      //   })
-      //   this.pageConfig.page = 1
-      //   this.pageConfig.pageSize = 10
-      //   this.tableData = this.allTableData.slice((this.pageConfig.page - 1)*this.pageConfig.pageSize, this.pageConfig.pageSize)
       userInfo.value = data.dakaUserInfo;
       data.items.forEach((i: any) => {
         i.simpleContent = JSON.parse(i.simpleContent);
-        i.simpleContent.images.forEach((j) => {
+        i.simpleContent.images.forEach((j: any) => {
           j.preSrc = imgRplPre(j.src);
         });
-        i.taskList = [];
-        i.evaluateStatus = 0;
       });
       totalList.value = data.items;
-      roleList.value = totalList.value.slice(
+      tableData.value = (totalList.value || []).slice(
         (queryParams.pageNum - 1) * queryParams.pageSize,
         queryParams.pageSize
       );
+
+      for (const item of tableData.value || []) {
+      }
       total.value = data.total;
     })
     .finally(() => {
@@ -123,17 +91,10 @@ function handleQuery() {
 }
 
 function pageChange() {
-  roleList.value = totalList.value.slice(
+  tableData.value = (totalList.value || []).slice(
     (queryParams.pageNum - 1) * queryParams.pageSize,
     queryParams.pageNum * queryParams.pageSize
   );
-}
-
-/** 重置查询 */
-function resetQuery() {
-  queryFormRef.value.resetFields();
-  queryParams.pageNum = 1;
-  handleQuery();
 }
 
 onMounted(() => {

@@ -79,20 +79,6 @@ function handleQuery() {
     });
 }
 
-function pageChange() {
-  roleList.value = totalList.value.slice(
-    (queryParams.pageNum - 1) * queryParams.pageSize,
-    queryParams.pageNum * queryParams.pageSize
-  );
-}
-
-/** 重置查询 */
-function resetQuery() {
-  queryFormRef.value.resetFields();
-  queryParams.pageNum = 1;
-  handleQuery();
-}
-
 onMounted(() => {
   handleQuery();
 });
